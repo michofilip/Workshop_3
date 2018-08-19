@@ -9,39 +9,35 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class DbService {
 
-//
-//    private static String dbName = "coding_school";
-//    private static String dbUser = "root";
-//    private static String dbPass = "coderslab";
-//
-//    private static Connection createConn() throws SQLException {
-//        String dbName1 = dbName.length() == 0 ? dbName : ("/" + dbName);
-//
-//        String connUrl = "jdbc:mysql://localhost:3306" + dbName1 + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false";
-//        return DriverManager.getConnection(connUrl, dbUser, dbPass);
-//    }
+    private static Connection createConn() throws SQLException {
+        Context ctx;
+        DataSource ds = null;
+        try {
+            ctx = new InitialContext();
+            ds = (DataSource) ctx.lookup("java:comp/env/jdbc/coding_school");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
 
-    private static DataSource ds;
-
-    public static Connection createConn() throws SQLException {
-        return getInstance().getConnection();
+        return ds.getConnection();
     }
 
-    private static DataSource getInstance() {
-        if (ds == null) {
-            try {
-                Context ctx = new InitialContext();
-                ds = (DataSource) ctx.lookup("java:comp/env/jdbc/coding_school");
-            } catch (NamingException e) {
-                e.printStackTrace();
+    private static PreparedStatement getPreparedStatement(String query, List<String> params, Connection conn) throws SQLException {
+        PreparedStatement st = conn.prepareStatement(query);
+        if (params != null) {
+            int i = 1;
+            for (String p : params) {
+                st.setString(i++, p);
             }
         }
-        return ds;
+
+        return st;
     }
 
     /**
@@ -52,6 +48,10 @@ public class DbService {
      * @return id or null
      * @throws SQLException
      */
+    public static Integer insertIntoDatabase(String query, String... params) throws SQLException {
+        return insertIntoDatabase(query, Arrays.asList(params));
+    }
+
     public static Integer insertIntoDatabase(String query, List<String> params) throws SQLException {
         try (Connection conn = createConn()) {
             String[] generatedColumns = {"id"};
@@ -78,6 +78,9 @@ public class DbService {
 
     }
 
+    public static List<String[]> getData(String query, String... params) throws SQLException {
+        return getData(query, Arrays.asList(params));
+    }
 
     public static List<String[]> getData(String query, List<String> params) throws SQLException {
         try (Connection conn = createConn()) {
@@ -110,21 +113,11 @@ public class DbService {
 
     }
 
-    private static PreparedStatement getPreparedStatement(String query, List<String> params, Connection conn) throws SQLException {
-        PreparedStatement st = conn.prepareStatement(query);
-        if (params != null) {
-            int i = 1;
-            for (String p : params) {
-                st.setString(i++, p);
-            }
-        }
-
-        return st;
+    public static int executeUpdate(String query, String... params) throws SQLException {
+        return executeUpdate(query, Arrays.asList(params));
     }
 
-
-    public static int executeUpdate(String query, List<String> params)
-            throws SQLException {
+    public static int executeUpdate(String query, List<String> params) throws SQLException {
         try (Connection conn = createConn()) {
             PreparedStatement st = getPreparedStatement(query, params, conn);
             return st.executeUpdate();

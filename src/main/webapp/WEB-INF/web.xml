@@ -3,34 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
-    <!--<welcome-file-list>-->
-    <!--<welcome-file>index_2.html</welcome-file>-->
-    <!--<welcome-file>index_1.html</welcome-file>-->
-    <!--</welcome-file-list>-->
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>
+    </welcome-file-list>
     <!--<servlet>-->
-        <!--<servlet-name>Servlet15</servlet-name>-->
-        <!--<servlet-class>pl.coderslab.servlets2.Servlet15</servlet-class>-->
+    <!--<servlet-name>Servlet15</servlet-name>-->
+    <!--<servlet-class>pl.coderslab.servlets2.Servlet15</servlet-class>-->
     <!--</servlet>-->
     <!--<servlet-mapping>-->
-        <!--<servlet-name>Servlet15</servlet-name>-->
-        <!--<url-pattern>/Servlet15</url-pattern>-->
+    <!--<servlet-name>Servlet15</servlet-name>-->
+    <!--<url-pattern>/Servlet15</url-pattern>-->
     <!--</servlet-mapping>-->
 
     <!--<servlet>-->
-        <!--<servlet-name>LoginServlet</servlet-name>-->
-        <!--<servlet-class>pl.coderslab.servlets4cfiltry.LoginServlet</servlet-class>-->
-        <!--<init-param>-->
-            <!--<param-name>login</param-name>-->
-            <!--<param-value>log</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>password</param-name>-->
-            <!--<param-value>pass</param-value>-->
-        <!--</init-param>-->
+    <!--<servlet-name>LoginServlet</servlet-name>-->
+    <!--<servlet-class>pl.coderslab.servlets4cfiltry.LoginServlet</servlet-class>-->
+    <!--<init-param>-->
+    <!--<param-name>login</param-name>-->
+    <!--<param-value>log</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>password</param-name>-->
+    <!--<param-value>pass</param-value>-->
+    <!--</init-param>-->
     <!--</servlet>-->
     <!--<servlet-mapping>-->
-        <!--<servlet-name>LoginServlet</servlet-name>-->
-        <!--<url-pattern>/login</url-pattern>-->
+    <!--<servlet-name>LoginServlet</servlet-name>-->
+    <!--<url-pattern>/login</url-pattern>-->
     <!--</servlet-mapping>-->
 
 </web-app>

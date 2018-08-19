@@ -1,21 +1,20 @@
 package pl.coderslab.models;
 
-import pl.coderslab.service.DbService;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Exercise {
     private int id;
     private String title;
     private String description;
 
     public Exercise() {
+        this.id = 0;
     }
 
     public Exercise(String title, String description) {
-        this.id = 0;
+        this(0, title, description);
+    }
+
+    public Exercise(int id, String title, String description) {
+        this.id = id;
         this.title = title;
         this.description = description;
     }
@@ -34,136 +33,26 @@ public class Exercise {
         return id;
     }
 
+    public Exercise setId(int id) {
+        this.id = id;
+        return this;
+    }
+
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Exercise setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Exercise setDescription(String description) {
         this.description = description;
-    }
-
-    // crud
-    public static ArrayList<Exercise> loadAll() {
-        ArrayList<Exercise> list = new ArrayList<>();
-        String query = "SELECT id, title, description FROM exercises";
-
-        try {
-            List<String[]> rows = DbService.getData(query, null);
-            for (String[] row : rows) {
-                Exercise exercise = new Exercise();
-                exercise.id = Integer.parseInt(row[0]);
-                exercise.title = row[1];
-                exercise.description = row[2];
-                list.add(exercise);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    public static Exercise loadById(int id) {
-        String query = "SELECT id, title, description FROM exercises WHERE id = ?";
-
-        try {
-            ArrayList<String> params = new ArrayList<>();
-            params.add(String.valueOf(id));
-            List<String[]> rows = DbService.getData(query, params);
-
-            String[] row = rows.get(0);
-            Exercise exercise = new Exercise();
-            exercise.id = Integer.parseInt(row[0]);
-            exercise.title = row[1];
-            exercise.description = row[2];
-
-            return exercise;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public void save() {
-        if (this.id == 0) {
-            String query = "INSERT INTO exercises(title, description) VALUES(?,?)";
-            List<String> params = new ArrayList<>();
-            params.add(this.title);
-            params.add(this.description);
-
-            try {
-                Integer id = DbService.insertIntoDatabase(query, params);
-                if (id != null) {
-                    this.id = id;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            String query = "UPDATE exercises SET title = ?, description = ? WHERE id = ?";
-            List<String> params = new ArrayList<>();
-            params.add(this.title);
-            params.add(this.description);
-            params.add(String.valueOf(this.id));
-
-            try {
-                DbService.executeUpdate(query, params);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void delete() {
-        if (this.id != 0) {
-            String query = "DELETE FROM exercises WHERE id = ?";
-            ArrayList<String> params = new ArrayList<>();
-            params.add(String.valueOf(id));
-
-            try {
-                DbService.executeUpdate(query, params);
-                this.id = 0;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // extra
-    public static ArrayList<Exercise> loadAllUnsolvedByUserId(int user_id) {
-        ArrayList<Exercise> list = new ArrayList<>();
-        //language=MySQL
-        String query = "SELECT id, title, description\n" +
-                "FROM exercises\n" +
-                "       LEFT JOIN solutions ON exercises.id = solutions.exercise_id\n" +
-                "       JOIN users ON solutions.user_id = users.id\n" +
-                "WHERE user_id = ? AND exercises IS NULL ";
-
-        try {
-            ArrayList<String> params = new ArrayList<>();
-            List<String[]> rows = DbService.getData(query, params);
-            for (String[] row : rows) {
-                Exercise exercise = new Exercise();
-                exercise.id = Integer.parseInt(row[0]);
-                exercise.title = row[1];
-                exercise.description = row[2];
-                list.add(exercise);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
+        return this;
     }
 }
